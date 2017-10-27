@@ -1,0 +1,117 @@
+C51 COMPILER V9.01   BLUETOOTH                                                             09/03/2017 05:10:55 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE BLUETOOTH
+OBJECT MODULE PLACED IN bluetooth.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE bluetooth.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h> //头文件调用，写程序时都要加上
+   2          #include <stdlib.h>
+   3          
+   4          #define uint unsigned int //宏定义，为了后面定义变量书写简便
+   5          #define uchar unsigned char
+   6          
+   7          code unsigned char  LED[] ={~0xFE,~0xFD,~0xFB,~0xF7,~0xEF,~0xDF,~0xBF,~0x7F,~0xFF,~0x3F,~0x1F,~0x0F,~0x07,
+             -~0x03,~0x01,~0x00};
+   8          code unsigned char  LED2[] ={~0x3F,~0x06,~0x5B,~0x4F,~0x66,~0x6D,~0x7D,~0x07,~0x7F,~0x6F,~0x77,~0x7C,~0x39
+             -,~0x5E,~0x79,~0x71};
+   9          
+  10          void main (void)
+  11          {
+  12   1             SCON= 0x50;      // SCON: 模式1, 8-bit UART, 使能接收
+  13   1             TMOD|= 0x20;
+  14   1             TH1=0xfd;           //波特率9600 初值
+  15   1             TL1=0xfd;
+  16   1             TR1=1;
+  17   1             EA=1;                 //打开总中断
+  18   1             ES=1;                 //打开串口中断
+  19   1             while(1)              //主循环不做任何动作
+  20   1             {
+  21   2             }
+  22   1      }
+  23          
+  24          /******************************************************************/
+  25          /* 串口中断程序*/
+  26          /******************************************************************/
+  27          void UART_SER () interrupt 4
+  28          {
+  29   1             uchar n;  //定义临时变量
+  30   1             if(RI)           //判断是接收中断产生
+  31   1             {
+  32   2                    RI=0;    //标志位清零
+  33   2                    n=SBUF;//读入缓冲区的值
+  34   2       
+  35   2                    switch(n)
+  36   2                    {
+  37   3                           case'0':P1=~LED[0];break;
+  38   3                           case'1':P1=~LED[1];break;
+  39   3                           case'2':P1=~LED[2];break;
+  40   3                           case'3':P1=~LED[3];break;
+  41   3                           case'4':P1=~LED[4];break;
+  42   3                           case'5':P1=~LED[5];break;
+  43   3                           case'6':P1=~LED[6];break;
+  44   3                           case'7':P1=~LED[7];break;
+  45   3                           case'8':P1=~LED[8];break;
+  46   3                           case'9':P1=~LED[9];break;
+  47   3                           case'A':P1=~LED[10];break;
+  48   3                           case'B':P1=~LED[11];break;
+  49   3                           case'C':P1=~LED[12];break;
+  50   3                           case'D':P1=~LED[13];break;
+  51   3                                                                                       case'E':P1=~LED[14];break;
+  52   3                                                                                       case'F':P1=~LED[15];break;
+  53   3                           default: P1=~LED[0];
+C51 COMPILER V9.01   BLUETOOTH                                                             09/03/2017 05:10:55 PAGE 2   
+
+  54   3                    }
+  55   2                                                              
+  56   2                    TI=1;
+  57   2                    SBUF=n;//把接收到的值再发回
+  58   2             }
+  59   1             if(TI)           //如果是发送标志位，清零
+  60   1             TI=0;
+  61   1      }
+  62          
+  63          /*
+  64          #include <SoftwareSerial.h>
+  65              SoftwareSerial BluetoothSerial(8, 9); // RX, TX
+  66              char value;       //用于中转数据
+  67              void setup() {
+  68                  //打开串行通信，等待端口打开：
+  69                  Serial.begin(9600);
+  70                  while (!Serial) {
+  71                      ; // 等待串口连接。
+  72                  }
+  73                  Serial.println("Serial Connected!");
+  74          
+  75                  // 设置蓝牙串口通讯的速率 HC06默认是9600
+  76                  BluetoothSerial.begin(9600);
+  77              }
+  78          
+  79              void loop() { // 循环
+  80                  if (Serial.available()) {   //检测单片机串口状态
+  81                      value = Serial.read();
+  82                      BluetoothSerial.write(value);//蓝牙模块将数据发送给单片机
+  83                  }
+  84          
+  85                  if (BluetoothSerial.available()) {//检测蓝牙模块串口状态
+  86                      value = BluetoothSerial.read();
+  87                      Serial.write(value); //单片机将指令发送到蓝牙模块
+  88                  }
+  89          
+  90              }   */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    207    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

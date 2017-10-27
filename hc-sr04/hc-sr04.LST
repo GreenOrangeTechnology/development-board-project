@@ -1,0 +1,264 @@
+C51 COMPILER V9.01   HC_SR04                                                               09/03/2017 07:44:47 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE HC_SR04
+OBJECT MODULE PLACED IN hc-sr04.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE hc-sr04.c OMF2 BROWSE DEBUG
+
+line level    source
+
+   1          #include <reg51.h>
+   2          //#include <intrins.h>
+   3                                                           //ÊýÂë¹ÜÊý×ÖÏÔÊ¾µÄº¬Òå  Ä£¿éÍ¨ÐÅµÄ¹ý³Ì ·µ»ØÖµ
+   4          sbit dula = P2^6;//     ¶ÎÑ¡ÐÅºÅµÄËø´æÆ÷¿ØÖÆ
+   5          sbit wela = P2^7;// Î»Ñ¡ÐÅºÅµÄËø´æÆ÷¿ØÖÆ
+   6          
+   7          unsigned char code wei[]={0xfe,0xfd,0xfb,0xf7,0xef,0xdf};
+   8                                                          //ÊýÂë¹Ü¸÷Î»µÄÂë±í
+   9          unsigned char code duan[]={0x76,0x79,0x38,0x38,0x3f,0x80};//HELLO.
+  10          unsigned char code duanNum[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d};
+  11                                                          //0-5µÄÂë±í
+  12          
+  13          unsigned char code total[6][16]={{0x38,0x19,0x29,0x31,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x
+             -39,0x39}, 
+  14          {0x09,0x09,0x09,0x09,0x01,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x08},
+  15          {0x09,0x09,0x09,0x09,0x09,0x01,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x08,0x09},
+  16          {0x09,0x09,0x09,0x09,0x09,0x09,0x01,0x09,0x09,0x09,0x09,0x09,0x09,0x08,0x09,0x09},
+  17          {0x09,0x09,0x09,0x09,0x09,0x09,0x09,0x01,0x09,0x09,0x09,0x09,0x08,0x09,0x09,0x09},
+  18          {0x0f,0x0f,0x0f,0x0f,0x0f,0x0f,0x0f,0x0f,0x07,0x0a,0x0d,0x0e,0x0f,0x0f,0x0f,0x0f}};
+  19          
+  20          //×¢Òâ:ÊÖ°ÑÊÖ½Ì³ÌÊÇ¹²ÑôÊýÂë¹Ü,0»áÁÁ¶ø»Û¾²ÊÇ¹²ÒõÊýÂë¹Ü,¸³1²ÅÁÁ,¶øÇÒÓÒµ½×ó´ú±íµÍµ½¸ßÎ»
+  21          //dula¶ÎÑ¡ÓëwelaÎ»Ñ¡:ÏÈÁÁºóÃð      P0¶¼ÊÇÓÃÀ´Ñ¡Î»µÄ,0´ú±íÑ¡ÖÐ
+  22          //ÊýÂë¹ÜÃ¿´ÎÖ»ÄÜÏÔÊ¾Ò»¸öÊý×Ö,¶àÏÔÊ¾ÊÇÍ¨¹ýÊÓ¾õÔÝÁôÐ§Ó¦ÊµÏÖµÄ
+  23          //Ïû¶¶ È¥¹íÓ° 
+  24          
+  25          void delay(unsigned int i)//ºóÃæÓÃ¶¨Ê±Æ÷´úÌæ
+  26          {
+  27   1              unsigned int m,n;
+  28   1              for(m=i;m>0;m--)
+  29   1                      for(n=90;n>0;n--);
+  30   1      }
+  31          
+  32          void main()
+  33          {
+  34   1              unsigned char num;
+  35   1              unsigned char que;
+  36   1              while(1)
+  37   1              {
+  38   2                      //¿ØÖÆÈÆÈ¦ÏÔÊ¾
+  39   2              for(que=0;que<16;que++)
+  40   2                      {
+  41   3                      
+  42   3                      for(num=0;num<6;num++)
+  43   3                      {
+  44   4                              P0=wei[num];       
+  45   4                              wela=1;
+  46   4                              wela=0;
+  47   4      
+  48   4                              P0=total[num][que];       
+  49   4                              dula=1;
+  50   4                              dula=0;
+  51   4                              delay(2);        //Ê±¼ä¼ä¸ô¶Ì£¬ÕâÊÇ¹Ø¼ü£¨ËùÎ½µÄÍ¬Ê±ÏÔÊ¾£¬Ö»ÊÇ¼ä¸ô½Ï¶Ì¶øÒÑ£¬ÀûÓÃÈËÑÛµÄÓà»ÔÐ§Ó¦£¬¾õµÃÃ¿¸öÊýÂë¹Ü
+             -¶¼Ò»Ö±ÔÚÁÁ--Ïû¶¶ È¥¹íÓ°,ÏûÓ°£©¡£
+  52   4                       }delay(100);   //ÎªÊ²Ã´ÓÒ±ßÒ»Ö±ÁÁ
+  53   3                       }
+C51 COMPILER V9.01   HC_SR04                                                               09/03/2017 07:44:47 PAGE 2   
+
+  54   2                      
+  55   2                      /*for(num=0;num<6;num++)
+  56   2                      {
+  57   2                              P0=wei[num];       
+  58   2                              wela=1;
+  59   2                              wela=0;
+  60   2      
+  61   2                              P0=duan[num];     
+  62   2                              dula=1;
+  63   2                              dula=0;
+  64   2                              delay(1000);     //Ê±¼ä¼ä¸ô¶Ì£¬ÕâÊÇ¹Ø¼ü£¨ËùÎ½µÄÍ¬Ê±ÏÔÊ¾£¬Ö»ÊÇ¼ä¸ô½Ï¶Ì¶øÒÑ£¬ÀûÓÃÈËÑÛµÄÓà»ÔÐ§Ó¦£¬¾õµÃÃ¿¸öÊýÂ
+             -ë¹Ü¶¼Ò»Ö±ÔÚÁÁ--Ïû¶¶ È¥¹íÓ°,ÏûÓ°£©¡£
+  65   2                       }*/
+  66   2              }
+  67   1              /*while(1)
+  68   1              {
+  69   1                              P0=0x7d;           
+  70   1                              wela=1;
+  71   1                              wela=0;
+  72   1      
+  73   1                              P0=0x4f;          //Êý×Ö¡°3¡±µÄ´úÂë
+  74   1                              dula=1;
+  75   1                              dula=0;
+  76   1                              delay(1000);
+  77   1      
+  78   1                              P0=0x00;          //Ê²Ã´¶¼²»ÏÔÊ¾µÄ´úÂë
+  79   1                              dula=1;
+  80   1                              dula=0;
+  81   1                              delay(1000);
+  82   1              }       */
+  83   1              
+  84   1      }
+  85          
+  86          /*
+  87          
+  88          unsigned char a,b,c,d;
+  89          float num=0.0;
+  90          sbit du=P2^6;
+  91          sbit we= P2^7;
+  92          sbit send=P2^1;
+  93          sbit receive=P2^2;
+  94          
+  95          unsigned char duan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  96          unsigned char wei []={0xfe,0xfd,0xfb,0xf7,0x2f,0x1f};
+  97          
+  98          void delay_10us()
+  99          {
+ 100          _nop_();
+ 101          _nop_();
+ 102          _nop_();
+ 103          _nop_();
+ 104          _nop_();
+ 105          _nop_(); 
+ 106          }
+ 107          
+ 108          void delay_200ms(void)
+ 109          {
+ 110          unsigned char i,j,k; 
+ 111          for(i=5;i>0;i--)
+ 112          for(j=132;j>0;j--)
+ 113          for(k=150;k>0;k--); 
+ 114          }
+C51 COMPILER V9.01   HC_SR04                                                               09/03/2017 07:44:47 PAGE 3   
+
+ 115          
+ 116          void main ()
+ 117          {
+ 118          unsigned int timeh,timel;
+ 119          send=0;//ÏÈÖÃÁã
+ 120          while(1)
+ 121          {
+ 122             receive=0;//ÖÃÁã
+ 123             EA=0;
+ 124             send=1;
+ 125             delay_10us();
+ 126             delay_10us();//ÑÓÊ±20us
+ 127             send=0;
+ 128             while(receive==0)//µÈ´ý¸ßµçÆ½
+ 129             {};
+ 130             
+ 131             TMOD=0X01;//ÉèÖÃ¶¨Ê±Æ÷0µÄ¹¤×÷·½Ê½
+ 132             TH0=0;//¸³³õÖµ
+ 133             TL0=0;
+ 134             EA=1;///´ò¿ª×ÜÖÐ¶Ï¿ª¹Ø
+ 135             ET0=1;//´ò¿ª¶¨Ê±Æ÷¿ª¹Ø
+ 136             TR0=1;
+ 137             while(receive)//µÈ´ýµÍµçÆ½
+ 138             {
+ 139                   
+ 140             }
+ 141              timeh=TH1;//È¡³ö¶¨Ê±Æ÷µÄÖµ
+ 142              timel=TL1;
+ 143              TR0=0;
+ 144            
+ 145              num=(TH0*255+TL0)/100.0*340/2;
+ 146              a=(unsigned int )num%10;//ËãÇå¸÷Î»Ê®Î»°ÙÎ»
+ 147              b=(unsigned int)num%100/10;
+ 148              c=(unsigned int )num/100%10;
+ 149              d=(unsigned int)num/10;
+ 150             
+ 151              P0=0xff;//ÊýÂë¹ÜÏÔÊ¾Êä³ö
+ 152              we=1;
+ 153              P0=0xfe;
+ 154              we=0;
+ 155              P0=0x00;
+ 156              du=1;
+ 157              P0=duan[a];
+ 158              delay_200ms();
+ 159              delay_200ms();
+ 160              delay_200ms();
+ 161              delay_200ms();
+ 162              delay_200ms();
+ 163              delay_200ms();
+ 164              delay_200ms();
+ 165              delay_200ms();
+ 166              P0=0x00;  
+ 167              du=0;
+ 168              
+ 169              P0=0xff;
+ 170              we=1;
+ 171              P0=0xfd;
+ 172              we=0;
+ 173              P0=0x00;
+ 174              du=1;
+ 175              P0=duan;
+ 176              delay_200ms();
+C51 COMPILER V9.01   HC_SR04                                                               09/03/2017 07:44:47 PAGE 4   
+
+ 177              delay_200ms();
+ 178              delay_200ms();
+ 179              delay_200ms();
+ 180              delay_200ms();
+ 181              delay_200ms();
+ 182              delay_200ms();
+ 183              delay_200ms();
+ 184              P0=0x00;
+ 185              du=0;
+ 186              P0=0xff;
+ 187              we=1;
+ 188              P0=0xfb;
+ 189              we=0;
+ 190              P0=0x00;
+ 191              du=1;
+ 192              P0=duan[c];
+ 193              delay_200ms();
+ 194              delay_200ms();
+ 195              delay_200ms();
+ 196              delay_200ms();
+ 197              delay_200ms();
+ 198              delay_200ms();
+ 199              delay_200ms();
+ 200              delay_200ms();
+ 201              P0=0x00;
+ 202              du=0;
+ 203              P0=0xff;
+ 204              we=1;
+ 205              P0=0xf7;
+ 206              we=0;
+ 207              P0=0x00;
+ 208              du=1;
+ 209              P0=duan[d];
+ 210              delay_200ms();
+ 211              delay_200ms();
+ 212              delay_200ms();
+ 213              delay_200ms();
+ 214              delay_200ms();
+ 215              delay_200ms();
+ 216              P0=0x00;
+ 217              du=0;
+ 218          }
+ 219             
+ 220          }
+ 221          void timer0 ()interrupt 1
+ 222          {
+ 223          TH0=0;
+ 224          TL0=0;
+ 225          }
+ 226          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    100    ----
+   CONSTANT SIZE    =    114    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   HC_SR04                                                               09/03/2017 07:44:47 PAGE 5   
+
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

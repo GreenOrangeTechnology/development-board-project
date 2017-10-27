@@ -1,0 +1,189 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/03/2017  05:10:55  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, bluetooth.obj TO bluetooth RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  bluetooth.obj (BLUETOOTH)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CCASE)
+
+
+LINK MAP OF MODULE:  bluetooth (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         _DATA_GROUP_
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0020H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     07DAH                  *** GAP ***
+            CODE    0800H     00BBH     UNIT         ?PR?UART_SER?BLUETOOTH
+            CODE    08BBH     0026H     UNIT         ?C?LIB_CODE
+            CODE    08E1H     0020H     UNIT         ?CO?BLUETOOTH
+            CODE    0901H     0014H     UNIT         ?PR?MAIN?BLUETOOTH
+            CODE    0915H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   bluetooth (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?BLUETOOTH
+
+*** NEW ROOT ***************************************************
+
+?PR?UART_SER?BLUETOOTH         0008H    0001H
+  +--> ?CO?BLUETOOTH
+
+
+
+SYMBOL TABLE OF MODULE:  bluetooth (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/03/2017  05:10:55  PAGE 2
+
+
+  -------         MODULE        ?C_STARTUP
+  C:0915H         SEGMENT       ?C_C51STARTUP
+  I:0009H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0918H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0915H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0915H         LINE#         133
+  C:0917H         LINE#         134
+  C:0918H         LINE#         135
+  C:0919H         LINE#         136
+  C:091BH         LINE#         185
+  C:091EH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        BLUETOOTH
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:08F1H         PUBLIC        LED2
+  C:0800H         PUBLIC        UART_SER
+  D:00A8H         PUBLIC        IE
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:0901H         PUBLIC        main
+  D:0099H         PUBLIC        SBUF
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  C:08E1H         PUBLIC        LED
+  B:0088H.6       PUBLIC        TR1
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/03/2017  05:10:55  PAGE 3
+
+
+  -------         PROC          MAIN
+  C:0901H         LINE#         10
+  C:0901H         LINE#         11
+  C:0901H         LINE#         12
+  C:0904H         LINE#         13
+  C:0907H         LINE#         14
+  C:090AH         LINE#         15
+  C:090DH         LINE#         16
+  C:090FH         LINE#         17
+  C:0911H         LINE#         18
+  C:0913H         LINE#         19
+  C:0913H         LINE#         20
+  C:0913H         LINE#         21
+  -------         ENDPROC       MAIN
+  -------         PROC          UART_SER
+  -------         DO            
+  D:0008H         SYMBOL        n
+  -------         ENDDO         
+  C:0800H         LINE#         27
+  C:080DH         LINE#         30
+  C:0813H         LINE#         31
+  C:0813H         LINE#         32
+  C:0815H         LINE#         33
+  C:0818H         LINE#         35
+  C:0851H         LINE#         36
+  C:0851H         LINE#         37
+  C:0853H         LINE#         38
+  C:0858H         LINE#         39
+  C:085DH         LINE#         40
+  C:0862H         LINE#         41
+  C:0867H         LINE#         42
+  C:086CH         LINE#         43
+  C:0871H         LINE#         44
+  C:0876H         LINE#         45
+  C:087BH         LINE#         46
+  C:0880H         LINE#         47
+  C:0885H         LINE#         48
+  C:088AH         LINE#         49
+  C:088FH         LINE#         50
+  C:0894H         LINE#         51
+  C:0899H         LINE#         52
+  C:089EH         LINE#         53
+  C:08A6H         LINE#         54
+  C:08A6H         LINE#         56
+  C:08A8H         LINE#         57
+  C:08ABH         LINE#         58
+  C:08ABH         LINE#         59
+  C:08AEH         LINE#         60
+  C:08B0H         LINE#         61
+  -------         ENDPROC       UART_SER
+  -------         ENDMOD        BLUETOOTH
+
+  -------         MODULE        ?C?CCASE
+  C:08BBH         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+******************************************************************************
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/03/2017  05:10:55  PAGE 4
+
+
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0101H BYTE (12%) *
+******************************************************************************
+
+Program Size: data=10.0 xdata=0 code=295
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
