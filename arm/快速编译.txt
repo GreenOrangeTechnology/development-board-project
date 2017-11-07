@@ -1,0 +1,245 @@
+
+
+  快速修改编译：
+
+
+解压内核源码包
+#tar jxvf android_kernel_2.6.35_smdkv210.tar.bz2
+#cd android-kernel-samsung-dev/
+
+
+  1、修改工具链
+
+
+
+ vim Makefile
+
+修改下面内容：
+export KBUILD_BUILDHOST := $(SUBARCH)
+ARCH				?= $(SUBARCH)
+CROSS_COMPILE	?=
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
+
+修改为：
+export KBUILD_BUILDHOST := $(SUBARCH)
+ARCH 	?= arm
+CROSS_COMPILE 	?= /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%) 
+
+
+  2、先加载内核默认配置
+
+
+  make  smdkv210_android_defconfig
+
+
+  3、修改默认配置
+
+
+  make  menuconfig
+
+  4、修改具体配置
+
+
+  4.1 修改设备
+
+修改底层消息和底层调试串行端口为UART0。
+
+System Type  --->
+(0) S3C UART to use for low-level messages
+Kernel hacking  --->
+(0) S3C UART to use for low-level debug
+
+
+去掉Maxim Semiconductor MAX8698 PMIC和Maxim 8698 voltage regulator的支持：
+Device Drivers  --->
+	[*] Multifunction device drivers  --->
+		[ ]   Maxim Semiconductor MAX8698 PMIC Support
+	[*] Voltage and Current Regulator Support  --->
+		< >  Maxim 8698 voltage regulator
+
+Boot options  --->
+	Default kernel command string
+        (console=ttySAC0,115200 root=/dev/mtdblock4 rootfstype=yaffs rw)
+
+ 
+
+
+  保存退出菜单
+
+ 
+
+  4.2修改内核的加载地址和参数地址
+
+    vim arch/arm/mach-s5pv210/Makefile.boot
+
+	zreladdr-y   := 0x30008000
+	params_phys-y   := 0x30000100
+
+
+  4.3修改内存物理地址
+
+vim arch/arm/mach-s5pv210/include/mach/memory.h
+修改第16行为：
+#if defined(CONFIG_MACH_SMDKV210)
+#define PHYS_OFFSET		UL(0x30000000)
+#else
+#define PHYS_OFFSET		UL(0x30000000)
+#endif
+
+vim arch/arm/mach-s5pv210/include/mach/map.h
+修改第157行为：
+#if defined(CONFIG_MACH_SMDKV210)
+#define S5PV210_PA_SDRAM	(0x30000000)
+#else
+#define S5PV210_PA_SDRAM	(0x30000000)
+#endif
+#define S5P_PA_SDRAM		S5PV210_PA_SDRAM
+
+
+   5、编译测试
+
+    make  zImage  -j2
+
+
+    得到一个初步的zImage内核镜像  ----->  arch/arm/boot/zIamge
+
+
+   6、uboot下载测试
+
+   
+    tftp 0x30008000 192.168.1.205:zImage
+
+    bootm 0x30008000
+
+
+
+   -----------------------------改进一  修改NAND 分区---------------------------------
+
+
+
+
+修改NAND Flash分区
+1.编译下载测试新内核
+drivers\mtd\nand\s3c_nand.c定义好NAND Flash的分区表，需要修改
+vi drivers/mtd/nand/s3c_nand.c
+
+#if defined(CONFIG_ARCH_S5PV210)
+struct mtd_partition s3c_partition_info[] = {
+	{
+		.name		= "boot",
+		.offset		= 0,          /* for bootloader */
+		.size			= (1*SZ_1M),
+		.mask_flags	= MTD_CAP_NANDFLASH,
+	},
+	{
+		.name		= "recovery",
+		.offset		= MTDPART_OFS_APPEND,
+		.size			= (5*SZ_1M),
+	},
+	{
+		.name		= "kernel",
+		.offset		= MTDPART_OFS_APPEND,
+		.size			= (5*SZ_1M),
+	},
+	{
+		.name		= "ramdisk",
+		.offset		= MTDPART_OFS_APPEND,
+		.size			= (3*SZ_1M),
+	},
+	{
+		.name		= "rootfs",
+		.offset		= MTDPART_OFS_APPEND,
+		.size			= MTDPART_SIZ_FULL,
+	}
+};
+
+struct s3c_nand_mtd_info s3c_nand_mtd_part_info = {
+	.chip_nr = 1,
+	.mtd_part_nr = ARRAY_SIZE(s3c_partition_info),
+	.partition = s3c_partition_info,
+};
+#endif
+
+
+
+
+ 
+ ==============================要求==================================
+
+  uboot 
+
+  1、增加启动状态检测LED显示
+
+
+  汇编阶段
+
+  C语言阶段
+
+
+ 2、增加常见的io外设到uboot中
+
+
+ 3、增加一个uboot命令
+
+     A）点灯命令
+
+     B）蜂鸣器鸣叫命令
+
+
+ 
+ kernel
+
+  1、移植标准的smdkv210内核到GEC210
+
+
+  2、 完成《S5PV210的驱动移植》
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+	
