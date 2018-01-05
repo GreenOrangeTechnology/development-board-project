@@ -30,5 +30,5 @@ void loop(){
 
   Serial.print("Temperature (oC): ");
   Serial.println((float)DHT11.temperature, 2);
- delay(2000);
+ delay(2000);//发送有点频繁,改为30秒或1分钟发送一次并保存到数据库
 }
